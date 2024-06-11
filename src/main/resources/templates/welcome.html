@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="fragments::page-header">
+
+</head>
+
+<body id="page-top">
+
+<div id="wrapper">
+
+    <div th:replace="fragments::leftside-bar"/>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="fragments::nav-bar"/>
+
+            <div style="background-image: url('img/meeting.jpg'); background-position: center; background-repeat: no-repeat;background-size: cover;height: 90%">
+                <h1 style="font-size: 80px;text-align: center; padding-top: 250px;font-weight: bold">welcome to the
+                    sMa...</h1>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer th:replace="fragments::footer"/>
+
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragments::logout-modal"/>
+
+<div th:replace="fragments::js"/>
+
+</body>
+
+</html>

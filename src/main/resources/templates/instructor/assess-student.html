@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="fragments::page-header">
+
+</head>
+
+<body id="page-top">
+
+<div id="wrapper">
+
+    <div th:replace="fragments::leftside-bar"/>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="fragments::nav-bar"/>
+            <div style="font-weight: bold; color: darkblue">
+                <h1 th:text="${student.firstName +' '+student.lastName +' - '+lesson.name}"></h1>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Default Card Example -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3>Assessment Form</h3>
+                            </div>
+                            <div class="card-body">
+                                <form th:object="${instructorAssessment}" th:action="@{/instructor/students/{email}/{id} (email=${student.email}, id=${lesson.id})}" method="post">
+                                    <div class="row col-12">
+                                        <div class="col-3 form-group">
+                                            <label>Grade
+                                                <input type="number" min="1" max="100" class="form-control"
+                                                       placeholder="Grade" th:field="*{grade}">
+                                            </label>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('grade')}">
+                                                <ul>
+                                                    <li th:each="error: ${#fields.errors('grade')}"
+                                                        th:text="${error}"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 form-group">
+                                            <label>Opinion
+                                                <textarea class="form-control" placeholder="Opinion"
+                                                          th:field="*{instructorImpressionOfStudent}"></textarea>
+                                            </label>
+                                            <div class="text-danger"
+                                                 th:if="${#fields.hasErrors('instructorImpressionOfStudent')}">
+                                                <ul>
+                                                    <li th:each="error: ${#fields.errors('instructorImpressionOfStudent')}"
+                                                        th:text="${error}"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-6">
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="float-right">
+                                                <button class="btn btn-success rounded" type="submit">Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Main Content -->
+
+
+<!-- Footer -->
+<footer th:replace="fragments::footer"/>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragments::logout-modal"/>
+
+<div th:replace="fragments::js"/>
+
+</body>
+
+</html>

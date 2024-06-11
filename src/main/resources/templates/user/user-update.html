@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="fragments::page-header">
+
+</head>
+
+<body id="page-top">
+
+<div id="wrapper">
+
+    <div th:replace="fragments::leftside-bar"/>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="fragments::nav-bar"/>
+            <div style="font-weight: bold; color: darkblue">
+                <h1>User Edit Page</h1>
+            </div>
+
+            <form th:object="${user}" th:action="@{/user/update}" method="post">
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>First Name
+                            <input type="text" class="form-control" placeholder="First name" th:field="*{firstName}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('firstName')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('firstName')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>Last Name
+                            <input type="text" class="form-control" placeholder="Last name" th:field="*{lastName}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('lastName')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('lastName')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>Email Address
+                            <input type="email" class="form-control" placeholder="Email Address" th:field="*{userName}"
+                                   readonly>
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('userName')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('userName')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>Phone Number
+                            <input type="text" class="form-control" placeholder="Phone Number"
+                                   th:field="*{address.phoneNumber}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('address.phoneNumber')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('address.phoneNumber')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>Password
+                            <input type="password" class="form-control" placeholder="Password" th:field="*{password}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('password')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('password')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>Confirm Password
+                            <input type="password" class="form-control" placeholder="Confirm Password"
+                                   th:field="*{confirmPassword}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('confirmPassword')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>Gender </label><br/>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                   class="custom-control-input" th:field="*{gender}" th:value="FEMALE">
+                            <label class="custom-control-label" for="customRadioInline1">Female</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                   class="custom-control-input" th:field="*{gender}" th:value="MALE">
+                            <label class="custom-control-label" for="customRadioInline2">Male</label>
+                        </div>
+                        <div class="text-danger" th:if="${#fields.hasErrors('gender')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('gender')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>Role</label>
+                        <select class="custom-select" th:field="*{role}">
+                            <option th:each="role:${roles}" th:value="${role.id}"
+                                    th:text="${role.description}"></option>
+                        </select>
+                        <div class="text-danger" th:if="${#fields.hasErrors('role')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('role')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>Address
+                            <input type="text" class="form-control" placeholder="Address"
+                                   th:field="*{address.addressInfo}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('address.addressInfo')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('address.addressInfo')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>State</label>
+                        <select class="custom-select" th:field="*{address.state}">
+                            <option th:each="theState:${states}" th:value="${theState}"
+                                    th:text="${theState+' - '+theState.abbreviation}"></option>
+                        </select>
+                        <div class="text-danger" th:if="${#fields.hasErrors('address.state')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('address.state')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-6">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="float-right">
+                            <button class="btn btn-success rounded" type="submit">Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="alert alert-danger text-center" style="margin: 10px" role="alert" th:text="${error}"
+             th:if="${error}"></div>
+
+        <!-- End of Main Content -->
+
+
+        <!-- Footer -->
+        <footer th:replace="fragments::footer"/>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragments::logout-modal"/>
+
+<div th:replace="fragments::js"/>
+
+</body>
+
+</html>

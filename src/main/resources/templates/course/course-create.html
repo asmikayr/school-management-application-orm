@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="fragments::page-header">
+
+</head>
+
+<body id="page-top">
+
+<div id="wrapper">
+
+    <div th:replace="fragments::leftside-bar"/>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="fragments::nav-bar"/>
+            <div style="font-weight: bold; color: darkblue">
+                <h1>Course Creation Page</h1>
+            </div>
+
+            <form th:object="${course}" th:action="@{/course/create}" method="post">
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>Course Name
+                            <input type="text" class="form-control" placeholder="Course name" th:field="*{name}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('name')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('name')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>Description
+                            <textarea class="form-control" placeholder="Description"
+                                      th:field="*{description}"></textarea>
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('description')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('description')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>Course Start Date
+                            <input type="date" class="form-control" th:field="*{startDate}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('startDate')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('startDate')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label>Course End Date
+                            <input type="date" class="form-control" th:field="*{endDate}">
+                        </label>
+                        <div class="text-danger" th:if="${#fields.hasErrors('endDate')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('endDate')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-3 form-group">
+                        <label>Course Manager</label>
+                        <select class="custom-select" th:field="*{courseManager}">
+                            <option th:value="''" selected>Select a Manager</option>
+                            <option th:each="manager:${managers}" th:value="${manager.userName}"
+                                    th:text="${manager.firstName +' '+ manager.lastName}"></option>
+                        </select>
+                        <div class="text-danger" th:if="${#fields.hasErrors('courseManager')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('courseManager')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-6">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="float-right">
+                            <button class="btn btn-success rounded" type="submit">Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <h1>Course List</h1>
+            </div>
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Course Name</th>
+                                    <th>Course Manager</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="course:${courses}">
+                                    <td th:text="${course.name}"></td>
+                                    <td th:text="${course.courseManager.firstName} + ' ' + ${course.courseManager.lastName}"></td>
+                                    <td th:text="${#temporals.format(course.startDate,'MM.dd.yyyy')}"></td>
+                                    <td th:text="${#temporals.format(course.endDate,'MM.dd.yyyy')}"></td>
+                                    <td>
+                                        <a th:href="@{/course/update/{id}(id=${course.id})}">
+                                            <button type="button" class="btn btn-warning">Update</button>
+                                        </a>
+                                        <a th:href="@{/course/delete/{id}(id=${course.id})}">
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-success text-center" role="alert" th:text="${success}"
+                 th:if="${success}"></div>
+            <div class="alert alert-danger text-center" role="alert" th:text="${error}"
+                 th:if="${error}"></div>
+        </div>
+        <!-- End of Main Content -->
+
+
+        <!-- Footer -->
+        <footer th:replace="fragments::footer"/>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragments::logout-modal"/>
+
+<div th:replace="fragments::js"/>
+
+</body>
+
+</html>
