@@ -25,7 +25,7 @@ public class CourseController {
 
         model.addAttribute("course",new CourseDTO());
         model.addAttribute("managers",userService.listAllByRole("manager"));
-        model.addAttribute("courses",courseService.listAllCourses());
+        model.addAttribute("courses",courseService.listAllCourse());
 
         return "/course/course-create";
     }
