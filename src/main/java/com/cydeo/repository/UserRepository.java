@@ -13,5 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //get user based on username
     User findByUserNameAndIsDeleted(String username, Boolean deleted);//returning User entity
 
+    List<User> findByRoleDescriptionIgnoreCase(String roleDescription);
+
 
 }

@@ -54,5 +54,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public List<UserDTO> listAllByRole(String description) {
+        return userRepository.findByRoleDescriptionIgnoreCase(description)
+                .stream()
+                .map(userMapper::convertToDto)
+                .collect(Collectors.toList());
+    }
+
 
 }

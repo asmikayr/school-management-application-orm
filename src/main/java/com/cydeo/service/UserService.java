@@ -12,6 +12,8 @@ public interface UserService {
     UserDTO update (UserDTO user);
     void delete (String username);//delete based on unique, this case is username
 
+    List<UserDTO> listAllByRole(String description);// for course create page
+
 
 
 
