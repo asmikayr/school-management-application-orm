@@ -45,7 +45,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void update(CourseDTO dto) {
-
+        Optional<Course> foundTask = courseRepository.findById(dto.getId());
+        Course convertedDto = mapperUtil.convert(dto, new Course());
+        if (foundTask.isPresent()){
+            convertedDto.setId(foundTask.get().getId());
+            courseRepository.save(convertedDto);
+        }
     }
 
     @Override
