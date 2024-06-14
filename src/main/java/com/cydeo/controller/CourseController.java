@@ -3,9 +3,13 @@ package com.cydeo.controller;
 import com.cydeo.dto.CourseDTO;
 import com.cydeo.service.CourseService;
 import com.cydeo.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -30,4 +34,15 @@ public class CourseController {
         return "/course/course-create";
     }
 
+    @PostMapping("/create")
+    public String insertCourse(@Valid @ModelAttribute("course") CourseDTO course, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()){
+            model.addAttribute("managers",userService.listAllByRole("manager"));
+            model.addAttribute("courses",courseService.listAllCourse());
+            return "/course/course-create";
+        }
+        courseService.save(course);
+        return "redirect:/course/create";
+
+    }
 }
