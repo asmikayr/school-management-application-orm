@@ -38,7 +38,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(CourseDTO dto) {
+        //retrieve all the students from db and assign course with false value
 
+        courseRepository.save(mapperUtil.convert(dto, new Course()));
     }
 
     @Override
