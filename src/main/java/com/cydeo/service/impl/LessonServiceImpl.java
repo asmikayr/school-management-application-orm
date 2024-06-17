@@ -1,6 +1,7 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.LessonDTO;
+import com.cydeo.entity.Lesson;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.LessonRepository;
 import com.cydeo.service.LessonService;
@@ -27,4 +28,11 @@ public class LessonServiceImpl implements LessonService {
                 .map(lesson -> mapperUtil.convert(lesson, new LessonDTO()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void save(LessonDTO lessonDTO) {
+        lessonRepository.save(mapperUtil.convert(lessonDTO, new Lesson()));
+    }
+
+
 }

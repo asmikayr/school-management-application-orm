@@ -7,4 +7,6 @@ import java.util.List;
 public interface LessonService {
 
     List<LessonDTO> findAllLessons();
+
+    void save(LessonDTO lessonDTO);
 }
