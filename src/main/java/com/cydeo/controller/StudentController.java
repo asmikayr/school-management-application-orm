@@ -1,5 +1,6 @@
 package com.cydeo.controller;
 
+import com.cydeo.dto.StudentDTO;
 import com.cydeo.entity.Student;
 import com.cydeo.enums.State;
 import com.cydeo.service.StudentService;
@@ -29,20 +30,20 @@ public class StudentController {
         return "/student/student-create";
     }
 
-//    @PostMapping("/create")
-//    public String insertUser(@Valid @ModelAttribute("student")Student student, BindingResult bindingResult, Model model){
-//        if(bindingResult.hasErrors()){
-//
-//            model.addAttribute("states", State.values());
-//
-//            return "/student/student-create";
-//        }
-//
-//        studentService.save(student);
-//
-//        return "redirect:/student/create";
-//    }
-//
+    @PostMapping("/create")
+    public String insertUser(@ModelAttribute("student") StudentDTO student, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+
+            model.addAttribute("states", State.values());
+
+            return "/student/student-create";
+        }
+
+        studentService.saveStudent(student);
+
+        return "redirect:/student/create";
+    }
+
 //    @GetMapping("/assign/{email}")
 //    public String assignStudent(@PathVariable("email") String email, Model model){
 //        Student student = studentService.findById(email);
