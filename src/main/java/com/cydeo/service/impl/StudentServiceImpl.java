@@ -39,6 +39,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void saveStudent(StudentDTO studentDTO) {
 
+        studentRepository.save(studentMapper.convertToEntity(studentDTO));
+
     }
 
     @Override
