@@ -14,6 +14,9 @@ public interface UserService {
 
     List<UserDTO> listAllByRole(String description);// for course create page
 
+    boolean isPasswordMatched(String password, String confirmPassword);
+
+
 
 
 

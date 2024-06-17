@@ -2,6 +2,7 @@ package com.cydeo.service.impl;
 
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.User;
+import com.cydeo.mapper.MapperUtil;
 import com.cydeo.mapper.UserMapper;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.UserService;
@@ -10,15 +11,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
+
 
 @Service
 public class UserServiceImpl implements UserService {
 
+
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final MapperUtil mapperUtil;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(MapperUtil mapperUtil, UserRepository userRepository, UserMapper userMapper) {
+        this.mapperUtil = mapperUtil;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
@@ -60,6 +65,11 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(userMapper::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isPasswordMatched(String password, String confirmPassword) {
+        return password.equals(confirmPassword);
     }
 
 
