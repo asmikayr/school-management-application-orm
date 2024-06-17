@@ -28,7 +28,7 @@ public class UserController {
     @GetMapping("/create")
     public String createUser(Model model) {
 
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserDTO());
 
         model.addAttribute("users", userService.listAllUsers());
 
@@ -38,28 +38,28 @@ public class UserController {
 
         return "/user/user-create";
     }
-//
-//    @PostMapping("/create")
-//    public String insertUser(@Valid @ModelAttribute("user") UserDTO user, BindingResult bindingResult, Model model) {
-//
-//        if (!userService.isPasswordMatched(user.getPassword(), user.getConfirmPassword())) {
-//            bindingResult.rejectValue("confirmPassword", " ", "Password should match");
-//        }
-//
-//        if (bindingResult.hasErrors()) {
-//            model.addAttribute("roles", roleService.listAllRoles());
-//            model.addAttribute("states", State.values());
-//            model.addAttribute("users", userService.listAllUsers());
-//
-//            return "/user/user-create";
-//        }
-//
-//        userService.save(user);
-//
-//        return "redirect:/user/create";
-//    }
-//
-//
+
+    @PostMapping("/create")
+    public String insertUser(@Valid @ModelAttribute("user") UserDTO user, BindingResult bindingResult, Model model) {
+
+        if (!userService.isPasswordMatched(user.getPassword(), user.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", " ", "Password should match");
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleService.listAllRoles());
+            model.addAttribute("states", State.values());
+            model.addAttribute("users", userService.listAllUsers());
+
+            return "/user/user-create";
+        }
+
+        userService.save(user);
+
+        return "redirect:/user/create";
+    }
+
+
 
     @ModelAttribute
     public void defineGeneralModels(Model model) {
