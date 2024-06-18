@@ -31,13 +31,13 @@ public class User extends BaseEntity {
 
     private String confirmPassword;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     private Role role;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Address address;
 
 }
