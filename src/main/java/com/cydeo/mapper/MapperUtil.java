@@ -1,5 +1,6 @@
 package com.cydeo.mapper;
 
+import com.cydeo.entity.Lesson;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +15,8 @@ public class MapperUtil {
         this.mapper = mapper;
     }
 
-    public <T> T convert(Object object, T convertedObj){
-        return mapper.map(object, (Type) convertedObj);
+    public <T> T convert(Object object, Class<T> convertedObj){
+        return mapper.map(object, convertedObj);
     }
 
 }
