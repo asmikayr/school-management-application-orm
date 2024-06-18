@@ -25,13 +25,13 @@ public class LessonServiceImpl implements LessonService {
     public List<LessonDTO> findAllLessons() {
         return lessonRepository.findAllByIsDeleted(false)
                 .stream()
-                .map(lesson -> mapperUtil.convert(lesson, new LessonDTO()))
+                .map(lesson -> mapperUtil.convert(lesson, LessonDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void save(LessonDTO lessonDTO) {
-        lessonRepository.save(mapperUtil.convert(lessonDTO, new Lesson()));
+        lessonRepository.save(mapperUtil.convert(lessonDTO, Lesson.class));
     }
 
 
