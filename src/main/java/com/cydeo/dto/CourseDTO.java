@@ -1,6 +1,5 @@
 package com.cydeo.dto;
 
-import com.cydeo.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -35,6 +34,6 @@ public class CourseDTO {
     private LocalDate endDate;
 
     @NotNull(message = "Select a course manager")
-    private User courseManager;
+    private UserDTO courseManager;
 
 }
