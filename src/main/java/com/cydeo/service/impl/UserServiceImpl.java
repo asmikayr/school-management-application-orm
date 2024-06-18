@@ -3,8 +3,9 @@ package com.cydeo.service.impl;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.User;
 import com.cydeo.mapper.MapperUtil;
-import com.cydeo.mapper.UserMapper;
 import com.cydeo.repository.UserRepository;
+import com.cydeo.service.CourseService;
+import com.cydeo.service.LessonService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -19,36 +20,40 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final MapperUtil mapperUtil;
+    private final CourseService courseService;
+    private final LessonService lessonService;
 
-    public UserServiceImpl(MapperUtil mapperUtil, UserRepository userRepository, UserMapper userMapper) {
+
+
+    public UserServiceImpl(MapperUtil mapperUtil, UserRepository userRepository, CourseService courseService, LessonService lessonService) {
         this.mapperUtil = mapperUtil;
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
+        this.courseService = courseService;
+        this.lessonService = lessonService;
     }
 
     @Override
     public List<UserDTO> listAllUsers() {
         List<User> userList = userRepository.findAllByIsDeletedOrderByFirstNameDesc(false);
-        return userList.stream().map(userMapper::convertToDto).collect(Collectors.toList());
+        return userList.stream().map(user-> mapperUtil.convert(user, UserDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public UserDTO findByUserName(String username) {
         User user = userRepository.findByUserNameAndIsDeleted(username, false);
-        return userMapper.convertToDto(user);
+        return mapperUtil.convert(user, UserDTO.class);
     }
 
     @Override
     public void save(UserDTO user) {
-        userRepository.save(userMapper.convertToEntity(user));
+        userRepository.save(mapperUtil.convert(user, User.class));
     }
 
     @Override
     public UserDTO update(UserDTO user) {
         User user1 = userRepository.findByUserNameAndIsDeleted(user.getUserName(), false);
-        User convertedUser = userMapper.convertToEntity(user);
+        User convertedUser = mapperUtil.convert(user, User.class);
         convertedUser.setId(user1.getId());
         userRepository.save(convertedUser);
         return findByUserName(user.getUserName());
@@ -63,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> listAllByRole(String description) {
         return userRepository.findByRoleDescriptionIgnoreCase(description)
                 .stream()
-                .map(userMapper::convertToDto)
+                .map(user -> mapperUtil.convert(user, UserDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -71,6 +76,66 @@ public class UserServiceImpl implements UserService {
     public boolean isPasswordMatched(String password, String confirmPassword) {
         return password.equals(confirmPassword);
     }
+
+    @Override
+    public boolean isEligibleToUpdate(String username, Long roleId) {
+        UserDTO user = findByUserName(username);
+
+        boolean result = true;
+
+        if (user.getRole().getId().equals(roleId)) {
+            return result;
+        }
+
+        String roleName = user.getRole().getDescription();
+
+
+        switch (roleName) {
+            case "Admin":
+                if (listAllUsers().stream().filter(u -> u.getRole().getDescription().equals("Admin")).count() == 1)
+                    result = false;
+                break;
+            case "Manager":
+                if (courseService.listAllCourse().stream().anyMatch(c -> c.getCourseManager().equals(mapperUtil.convert(user, User.class))))
+                    result = false;
+                break;
+            case "Instructor":
+                if (lessonService.findAllLessons().stream().anyMatch(l -> l.getInstructor().equals(mapperUtil.convert(user, User.class))))
+                    result = false;
+                break;
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public String isEligibleToDelete(String username) {
+        UserDTO user = findByUserName(username);
+
+        String roleName = user.getRole().getDescription();
+
+        String result = "";
+
+        switch (roleName) {
+            case "Admin":
+                if (listAllUsers().stream().filter(u -> u.getRole().getDescription().equals("Admin")).count() == 1)
+                    result = "This admin is unique in the system. Not allowed to delete";
+                break;
+            case "Manager":
+                if (courseService.listAllCourse().stream().anyMatch(c -> c.getCourseManager().equals(mapperUtil.convert(user, User.class))))
+                    result = "This manager is responsible for either one or more than one courses. Not allowed to delete";
+                break;
+            case "Instructor":
+                if (lessonService.findAllLessons().stream().anyMatch(l -> l.getInstructor().equals(mapperUtil.convert(user, User.class))))
+                    result = "This Instructor is responsible for either one or more than one lessons. Not allowed to delete";
+                break;
+        }
+
+
+        return result;
+    }
+
 
 
 }

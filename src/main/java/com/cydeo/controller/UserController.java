@@ -59,6 +59,63 @@ public class UserController {
         return "redirect:/user/create";
     }
 
+    @GetMapping("/update/{username}")
+    public String editUser(@PathVariable("username") String username, Model model) {
+
+        model.addAttribute("user", userService.findByUserName(username));
+
+        model.addAttribute("roles", roleService.listAllRoles());
+
+        model.addAttribute("states", State.values());
+
+        return "/user/user-update";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@Valid @ModelAttribute("user") UserDTO user, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+
+
+        if (!userService.isEligibleToUpdate(user.getUserName(), user.getRole().getId())) {
+            redirectAttributes.addFlashAttribute("error", "Not allowed to update role");
+            return "redirect:/user/update/" + user.getUserName();
+        }
+
+
+        if (!userService.isPasswordMatched(user.getPassword(), user.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", " ", "Password should match");
+        }
+
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("roles", roleService.listAllRoles());
+
+            model.addAttribute("states", State.values());
+
+            return "/user/user-update";
+        }
+
+        redirectAttributes.addFlashAttribute("success", "Successfully updated");
+
+        userService.update(user);
+
+        return "redirect:/user/create";
+
+    }
+
+    @GetMapping("/delete/{username}")
+//    public String deleteUser(@PathVariable("username") String username, RedirectAttributes redirectAttributes) {
+//        String eligibleToDelete = userService.isEligibleToDelete(username);
+//        if (!eligibleToDelete.isEmpty()) {
+//            redirectAttributes.addFlashAttribute("error", eligibleToDelete);
+//        } else {
+//
+//            redirectAttributes.addFlashAttribute("success", "Successfully deleted");
+//            userService.delete(username);
+//        }
+//
+//
+//        return "redirect:/user/create";
+//    }
 
 
     @ModelAttribute
