@@ -16,7 +16,9 @@ public interface UserService {
 
     boolean isPasswordMatched(String password, String confirmPassword);
 
+    boolean isEligibleToUpdate(String username, Long roleId);
 
+    String isEligibleToDelete(String username);
 
 
 
