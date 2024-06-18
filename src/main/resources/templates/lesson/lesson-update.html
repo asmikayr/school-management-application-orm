@@ -63,7 +63,7 @@
                     <div class="col-3 form-group">
                         <label>Instructor</label>
                         <select class="custom-select" th:field="*{instructor}">
-                            <option th:each="instructor:${instructors}" th:value="${instructor.userName}"
+                            <option th:each="instructor:${instructors}" th:value="${instructor.id}"
                                     th:text="${instructor.firstName +' '+ instructor.lastName}"></option>
                         </select>
                         <div class="text-danger" th:if="${#fields.hasErrors('instructor')}">

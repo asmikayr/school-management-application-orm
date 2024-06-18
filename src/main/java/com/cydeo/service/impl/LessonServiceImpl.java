@@ -1,6 +1,7 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.LessonDTO;
+import com.cydeo.entity.Lesson;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.LessonRepository;
 import com.cydeo.service.LessonService;
@@ -24,7 +25,14 @@ public class LessonServiceImpl implements LessonService {
     public List<LessonDTO> findAllLessons() {
         return lessonRepository.findAllByIsDeleted(false)
                 .stream()
-                .map(lesson -> mapperUtil.convert(lesson, new LessonDTO()))
+                .map(lesson -> mapperUtil.convert(lesson, LessonDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void save(LessonDTO lessonDTO) {
+        lessonRepository.save(mapperUtil.convert(lessonDTO, Lesson.class));
+    }
+
+
 }

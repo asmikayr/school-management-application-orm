@@ -1,11 +1,9 @@
 package com.cydeo.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +23,10 @@ public class Lesson extends BaseEntity{
 
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     private Course course;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     private User instructor;
 
 }
