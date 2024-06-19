@@ -20,7 +20,7 @@
             <!-- Topbar -->
             <nav th:replace="fragments::nav-bar"/>
             <div style="font-weight: bold; color: darkblue">
-                <h1 th:text="${student.firstName +' '+student.lastName +' - '+lesson.name}"></h1>
+                <h1 th:text="${lessonStudent.student.firstName +' '+lessonStudent.student.lastName +' - '+lessonStudent.lesson.name}"></h1>
             </div>
             <div class="container-fluid">
                 <div class="row">
@@ -31,32 +31,21 @@
                                 <h3>Assessment Form</h3>
                             </div>
                             <div class="card-body">
-                                <form th:object="${instructorAssessment}" th:action="@{/instructor/students/{email}/{id} (email=${student.email}, id=${lesson.id})}" method="post">
+                                <form th:object="${assessment}"
+                                      th:action="@{/instructor/students/{lessonStudentId} (lessonStudentId=${assessment.lessonStudent.id})}"
+                                      method="post">
                                     <div class="row col-12">
                                         <div class="col-3 form-group">
                                             <label>Grade
                                                 <input type="number" min="1" max="100" class="form-control"
                                                        placeholder="Grade" th:field="*{grade}">
                                             </label>
-                                            <div class="text-danger" th:if="${#fields.hasErrors('grade')}">
-                                                <ul>
-                                                    <li th:each="error: ${#fields.errors('grade')}"
-                                                        th:text="${error}"></li>
-                                                </ul>
-                                            </div>
                                         </div>
                                         <div class="col-3 form-group">
                                             <label>Opinion
                                                 <textarea class="form-control" placeholder="Opinion"
                                                           th:field="*{instructorImpressionOfStudent}"></textarea>
                                             </label>
-                                            <div class="text-danger"
-                                                 th:if="${#fields.hasErrors('instructorImpressionOfStudent')}">
-                                                <ul>
-                                                    <li th:each="error: ${#fields.errors('instructorImpressionOfStudent')}"
-                                                        th:text="${error}"></li>
-                                                </ul>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="row col-6">
@@ -68,23 +57,56 @@
                                         </div>
                                     </div>
                                 </form>
+                                <div>
+                                    <h1>Grades</h1>
+                                </div>
+                                <div class="container-fluid">
+                                    <!-- DataTables Example -->
+                                    <div class="card shadow mb-4">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                       cellspacing="0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Student Name</th>
+                                                        <th>Lesson</th>
+                                                        <th>Grade Date</th>
+                                                        <th>Grade</th>
+                                                        <th>Opinion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="grade:${grades}">
+                                                        <td th:text="${grade.lessonStudent.student.firstName} + ' ' + ${grade.lessonStudent.student.lastName}"></td>
+                                                        <td th:text="${grade.lessonStudent.lesson.name}"></td>
+                                                        <td th:text="${#temporals.format(grade.gradeDate,'MM.dd.yyyy HH:mm')}"></td>
+                                                        <td th:text="${grade.grade}"></td>
+                                                        <td th:text="${grade.instructorImpressionOfStudent}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-danger text-center" role="alert" th:text="${error}"
+                                     th:if="${error}"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- End of Main Content -->
+
+
+        <!-- Footer -->
+        <footer th:replace="fragments::footer"/>
+        <!-- End of Footer -->
+
     </div>
-</div>
-<!-- End of Main Content -->
-
-
-<!-- Footer -->
-<footer th:replace="fragments::footer"/>
-<!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
+    <!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->

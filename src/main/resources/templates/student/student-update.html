@@ -22,8 +22,7 @@
             <div style="font-weight: bold; color: darkblue">
                 <h1>Student Edit Page</h1>
             </div>
-
-            <form th:object="${student}" th:action="@{/student/update}" method="post">
+            <form th:object="${student}" th:action="@{/student/update/{id} (id=${student.id})}" method="post">
                 <div class="row col-12">
                     <div class="col-3 form-group">
                         <label>First Name

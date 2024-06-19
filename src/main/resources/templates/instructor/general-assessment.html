@@ -33,11 +33,9 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Student Name</th>
+                                    <th>Course</th>
                                     <th>Lesson</th>
-                                    <th>Date</th>
-                                    <th>Grade</th>
-                                    <th>Opinion</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -45,11 +43,9 @@
                                 <tr th:each="studentLesson:${studentLessons}">
                                     <td th:text="${studentLesson.student.firstName} + ' ' + ${studentLesson.student.lastName}"></td>
                                     <td th:text="${studentLesson.lesson.name}"></td>
-                                    <td th:text="${#temporals.format(studentLesson.student.lessonGrade.get(studentLesson.lesson).date,'MM.dd.yyyy')}"></td>
-                                    <td th:text="${studentLesson.student.lessonGrade.get(studentLesson.lesson).grade}"></td>
-                                    <td th:text="${studentLesson.student.lessonGrade.get(studentLesson.lesson).instructorImpressionOfStudent}"></td>
+                                    <td th:text="${studentLesson.lesson.course.name}"></td>
                                     <td>
-                                        <a th:href="@{/instructor/students/{email}/{id} (email=${studentLesson.student.email}, id=${studentLesson.lesson.id})}">
+                                        <a th:href="@{/instructor/students/{lessonStudentId} (lessonStudentId=${studentLesson.id})}">
                                             <button type="button" class="btn btn-facebook">Assess</button>
                                         </a>
                                     </td>
