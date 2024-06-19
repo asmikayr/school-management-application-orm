@@ -1,5 +1,6 @@
 package com.cydeo.entity;
 
+import com.cydeo.dto.UserDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;

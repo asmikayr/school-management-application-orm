@@ -8,6 +8,7 @@ import com.cydeo.service.LessonService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +33,11 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void save(LessonDTO lessonDTO) {
         lessonRepository.save(mapperUtil.convert(lessonDTO, Lesson.class));
+    }
+
+    @Override
+    public LessonDTO findById(Long id) {
+        return mapperUtil.convert(lessonRepository.findById(id), LessonDTO.class);
     }
 
 

@@ -32,7 +32,7 @@ public class LessonDTO {
     private Course course;
 
     @NotNull(message = "Select an instructor")
-    private User instructor;
+    private UserDTO instructor;
 
 
 }
