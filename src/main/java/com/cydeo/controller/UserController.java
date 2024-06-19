@@ -103,20 +103,16 @@ public class UserController {
     }
 
     @GetMapping("/delete/{username}")
-//    public String deleteUser(@PathVariable("username") String username, RedirectAttributes redirectAttributes) {
-//        String eligibleToDelete = userService.isEligibleToDelete(username);
-//        if (!eligibleToDelete.isEmpty()) {
-//            redirectAttributes.addFlashAttribute("error", eligibleToDelete);
-//        } else {
-//
-//            redirectAttributes.addFlashAttribute("success", "Successfully deleted");
-//            userService.delete(username);
-//        }
-//
-//
-//        return "redirect:/user/create";
-//    }
-
+    public String deleteUser(@PathVariable("username") String username, RedirectAttributes redirectAttributes) {
+        String eligibleToDelete = userService.isEligibleToDelete(username);
+        if (!eligibleToDelete.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", eligibleToDelete);
+        } else {
+            redirectAttributes.addFlashAttribute("success", "Successfully deleted");
+            userService.deleteByUsername(username);
+        }
+        return "redirect:/user/create";
+    }
 
     @ModelAttribute
     public void defineGeneralModels(Model model) {
