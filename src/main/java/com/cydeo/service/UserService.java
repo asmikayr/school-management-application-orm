@@ -10,7 +10,7 @@ public interface UserService {
     UserDTO findByUserName(String username);// to support update and delete - knowing what user to update/delete
     void save(UserDTO user);
     UserDTO update (UserDTO user);
-    void delete (String username);//delete based on unique, this case is username
+    void deleteByUsername (String username);//delete based on unique, this case is username
 
     List<UserDTO> listAllByRole(String description);// for course create page
 
