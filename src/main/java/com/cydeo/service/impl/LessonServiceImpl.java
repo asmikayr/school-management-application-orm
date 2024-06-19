@@ -10,6 +10,7 @@ import com.cydeo.service.LessonService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,10 +38,9 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
+
     public List<LessonDTO> listAllByInstructor(UserDTO user) {
         List<Lesson> lessonList = lessonRepository.findAllByInstructorAndIsDeleted(mapperUtil.convert(user, User.class), false);
         return lessonList.stream().map(lesson -> mapperUtil.convert(lesson, LessonDTO.class)).collect(Collectors.toList());
-    }
-
 
 }

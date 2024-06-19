@@ -12,4 +12,3 @@ public interface LessonService {
     void save(LessonDTO lessonDTO);
 
     List<LessonDTO> listAllByInstructor(UserDTO user);
-}
