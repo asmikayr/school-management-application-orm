@@ -1,7 +1,9 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.CourseDTO;
+import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Course;
+import com.cydeo.entity.User;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.CourseRepository;
 import com.cydeo.service.CourseService;
@@ -56,5 +58,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(Long id) {
 
+    }
+
+    @Override
+    public List<CourseDTO> listAllCourseByCourseManager(UserDTO userDTO) {
+        List<Course> courseList = courseRepository.findAllByCourseManagerAndIsDeleted(mapperUtil.convert(userDTO, User.class), false);
+        return courseList.stream().map(course -> mapperUtil.convert(course, CourseDTO.class)).collect(Collectors.toList());
     }
 }
