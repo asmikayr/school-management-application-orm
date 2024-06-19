@@ -9,4 +9,6 @@ public interface LessonService {
     List<LessonDTO> findAllLessons();
 
     void save(LessonDTO lessonDTO);
+
+    List<LessonDTO> listAllLessonByCourse(Long id);
 }
