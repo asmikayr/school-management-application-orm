@@ -190,10 +190,10 @@
                                     <td th:text="${user.address.phoneNumber}"></td>
                                     <td th:text="${user.role.description}"></td>
                                     <td>
-                                        <a th:href="@{/user/update/{username}(username=${user.userName})}">
+                                        <a th:href="@{/user/update/{id}(id=${user.id})}">
                                             <button type="button" class="btn btn-warning">Update</button>
                                         </a>
-                                        <a th:href="@{/user/delete/{username}(username=${user.userName})}">
+                                        <a th:href="@{/user/delete/{id}(id=${user.id})}">
                                             <button type="button" class="btn btn-danger">Delete</button>
                                         </a>
                                     </td>
@@ -206,7 +206,6 @@
             </div>
             <div class="alert alert-danger text-center" role="alert" th:text="${error}"
                  th:if="${error}"></div>
-
         </div>
         <!-- End of Main Content -->
 

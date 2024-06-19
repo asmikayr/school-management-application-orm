@@ -154,13 +154,13 @@
                                     <td th:text="${student.address.phoneNumber}"></td>
                                     <td th:text="${student.address.addressInfo}"></td>
                                     <td>
-                                        <a th:href="@{/student/update/{email}(email=${student.email})}">
+                                        <a th:href="@{/student/update/{id}(id=${student.id})}">
                                             <button type="button" class="btn btn-warning">Update</button>
                                         </a>
-                                        <a th:href="@{/student/delete/{email}(email=${student.email})}">
+                                        <a th:href="@{/student/delete/{id}(id=${student.id})}">
                                             <button type="button" class="btn btn-danger">Delete</button>
                                         </a>
-                                        <a th:href="@{/student/assign/{email}(email=${student.email})}">
+                                        <a th:href="@{/student/assign/{id}(id=${student.id})}">
                                             <button type="button" class="btn btn-success">Assign</button>
                                         </a>
                                     </td>
@@ -170,9 +170,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
+            <div class="alert alert-danger text-center" role="alert" th:text="${error}"
+                 th:if="${error}"></div>
         </div>
         <!-- End of Main Content -->
 

@@ -20,7 +20,7 @@
             <!-- Topbar -->
             <nav th:replace="fragments::nav-bar"/>
             <div style="font-weight: bold; color: darkblue">
-                <h1 th:text="'Courses for ' + ${student.firstName} + ' ' + ${student.lastName}"></h1>
+                <h1 th:text="'Courses for ' + ${studentCourses.get(0).student.firstName} + ' ' + ${studentCourses.get(0).student.lastName}"></h1>
             </div>
             <div class="container-fluid">
 
@@ -41,18 +41,18 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="course:${student.courseStatus}">
-                                    <td th:text="${course.key.name}"></td>
-                                    <td th:text="${course.key.courseManager.firstName} + ' ' + ${course.key.courseManager.lastName}"></td>
-                                    <td th:text="${#temporals.format(course.key.startDate,'MM.dd.yyyy')}"></td>
-                                    <td th:text="${#temporals.format(course.key.endDate,'MM.dd.yyyy')}"></td>
+                                <tr th:each="studentCourse:${studentCourses}">
+                                    <td th:text="${studentCourse.course.name}"></td>
+                                    <td th:text="${studentCourse.course.courseManager.firstName} + ' ' + ${studentCourse.course.courseManager.lastName}"></td>
+                                    <td th:text="${#temporals.format(studentCourse.course.startDate,'MM.dd.yyyy')}"></td>
+                                    <td th:text="${#temporals.format(studentCourse.course.endDate,'MM.dd.yyyy')}"></td>
                                     <td>
-                                        <a th:unless="${course.value}"
-                                           th:href="@{/student/enroll/{email}/{courseId} (email=${student.email}, courseId=${course.key.id})}">
+                                        <a th:unless="${studentCourse.isEnrolled()}"
+                                           th:href="@{/student/enroll/{courseStudentId}/{id} (courseStudentId=${studentCourse.id}, id=${studentCourse.student.id})}">
                                             <button type="button" class="btn btn-success">Enroll</button>
                                         </a>
-                                        <a th:if="${course.value}"
-                                           th:href="@{/student/drop/{email}/{courseId} (email=${student.email}, courseId=${course.key.id})}">
+                                        <a th:if="${studentCourse.isEnrolled()}"
+                                           th:href="@{/student/drop/{courseStudentId}/{id} (courseStudentId=${studentCourse.id}, id=${studentCourse.student.id})}">
                                             <button type="button" class="btn btn-danger">Drop</button>
                                         </a>
                                     </td>

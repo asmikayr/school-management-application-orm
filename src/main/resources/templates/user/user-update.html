@@ -23,7 +23,7 @@
                 <h1>User Edit Page</h1>
             </div>
 
-            <form th:object="${user}" th:action="@{/user/update}" method="post">
+            <form th:object="${user}" th:action="@{/user/update/{id} (id=${user.id})}" method="post">
                 <div class="row col-12">
                     <div class="col-3 form-group">
                         <label>First Name
