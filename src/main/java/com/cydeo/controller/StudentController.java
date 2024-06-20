@@ -16,14 +16,15 @@ public class StudentController {
 
     private final StudentService studentService;
 
+
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
     @GetMapping("/create")
     public String createUser(Model model){
-        model.addAttribute("student",new Student());
 
+        model.addAttribute("student",new Student());
         model.addAttribute("states", State.values());
         model.addAttribute("students", studentService.listAllStudents());
 
@@ -31,10 +32,12 @@ public class StudentController {
     }
 
     @PostMapping("/create")
-    public String insertUser(@ModelAttribute("student") StudentDTO student, BindingResult bindingResult, Model model){
+    public String insertUser(@Valid @ModelAttribute("student") StudentDTO student, BindingResult bindingResult, Model model){
+
         if(bindingResult.hasErrors()){
 
             model.addAttribute("states", State.values());
+            model.addAttribute("students", studentService.listAllStudents());
 
             return "/student/student-create";
         }
@@ -44,14 +47,14 @@ public class StudentController {
         return "redirect:/student/create";
     }
 
-//    @GetMapping("/assign/{email}")
-//    public String assignStudent(@PathVariable("email") String email, Model model){
-//        Student student = studentService.findById(email);
-//        model.addAttribute("student", student);
-//
-//        return "/student/student-courses";
-//    }
-//
+    @GetMapping("/assign/{id}")
+    public String assignStudent(@PathVariable("id") Long id, Model model){
+        StudentDTO student = studentService.findById(id);
+        model.addAttribute("student", student);
+
+        return "/student/student-courses";
+    }
+
 //    @GetMapping("/delete/{email}")
 //    public String deleteStudent(@PathVariable("email") String username){
 //
@@ -59,41 +62,42 @@ public class StudentController {
 //
 //        return "redirect:/student/create";
 //    }
-//    @GetMapping("/update/{email}")
-//    public String updateStudent(@PathVariable String email, Model model) {
-//        model.addAttribute("student",studentService.findById(email));
-//        model.addAttribute("states", State.values());
-//
-//        return "/student/student-update";
-//    }
-//
-//    @PostMapping("/update")
-//    public String updateStudent(@Valid @ModelAttribute("student") Student student, BindingResult bindingResult, Model model) {
-//
-//        if(bindingResult.hasErrors()){
-//            model.addAttribute("states", State.values());
-//            return "/student/student-update";
-//        }
-//        studentService.update(student);
-//
-//        return "redirect:/student/create";
-//
-//    }
-//
+
+    @GetMapping("/update/{id}")
+    public String updateStudent(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("student",studentService.findById(id));
+        model.addAttribute("states", State.values());
+
+        return "/student/student-update";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateStudent(@Valid @ModelAttribute("student") StudentDTO student, BindingResult bindingResult, Model model) {
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("states", State.values());
+            return "/student/student-update";
+        }
+        studentService.update(student);
+
+        return "redirect:/student/create";
+
+    }
+
 //    @GetMapping("/enroll/{email}/{courseId}")
 //    public String enrollStudent(@PathVariable String email, @PathVariable Long courseId){
 //        studentService.enrollStudent(email, courseId);
 //        return "redirect:/student/assign/{email}";
 //    }
-//
+
 //    @GetMapping("/drop/{email}/{courseId}")
 //    public String dropStudent(@PathVariable String email, @PathVariable Long courseId){
 //        studentService.dropStudent(email, courseId);
 //        return "redirect:/student/assign/{email}";
 //    }
-//
-//    @ModelAttribute
-//    public void defineGeneralModels(Model model) {
-//        model.addAttribute("pageTitle", "Student || Events");
-//    }
+
+    @ModelAttribute
+    public void defineGeneralModels(Model model) {
+        model.addAttribute("pageTitle", "Student || Events");
+    }
 }

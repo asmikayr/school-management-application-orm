@@ -2,50 +2,72 @@ package com.cydeo.service.impl;
 
 import com.cydeo.dto.StudentDTO;
 import com.cydeo.entity.Student;
-import com.cydeo.mapper.StudentMapper;
+import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.StudentRepository;
 import com.cydeo.service.StudentService;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
-//    private final ModelMapper modelMapper;
-    private final StudentMapper studentMapper;
+    private final MapperUtil mapperUtil;
 
-    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
+    public StudentServiceImpl(StudentRepository studentRepository,MapperUtil mapperUtil) {
         this.studentRepository = studentRepository;
-        this.studentMapper = studentMapper;
+        this.mapperUtil = mapperUtil;
     }
 
     @Override
     public List<StudentDTO> listAllStudents() {
 
-        List<Student> studentList = studentRepository.findAll(Sort.by("firstName"));
-        return studentList.stream().map(studentMapper::convertToDto).collect(Collectors.toList());
+        //List<Student> studentList = studentRepository.findAllByIsDeleted(false);
+        //return studentList.stream().map(studentMapper::convertToDto).collect(Collectors.toList());
+
+        return studentRepository.findAllByIsDeleted(false).stream().
+                map(student -> mapperUtil.convert(student, StudentDTO.class)).
+                collect(Collectors.toList());
     }
 
     @Override
-    public StudentDTO getStudentById(Long id) {
-        return studentMapper.convertToDto(studentRepository.findById(id).get());
+    public StudentDTO findById(Long id) {
+
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent()) {
+            return mapperUtil.convert(student.get(), StudentDTO.class);
+        }
+
+        return null;
     }
 
     @Override
     public void saveStudent(StudentDTO studentDTO) {
 
-        studentRepository.save(studentMapper.convertToEntity(studentDTO));
+        studentRepository.save(mapperUtil.convert(studentDTO, Student.class));
 
     }
 
     @Override
-    public StudentDTO updateStudent(StudentDTO studentDTO) {
-        return null;
+    public void update(StudentDTO studentDTO) {
+
+
+        Optional<Student> student = studentRepository.findById(studentDTO.getId());
+        Student convertedStudent = mapperUtil.convert(studentDTO, Student.class);
+
+        if (student.isPresent()) {
+            studentRepository.save(convertedStudent);
+        }
+    }
+
+    @Override
+    public void assignedToStudent(Long id) {
+
+
+
     }
 
     @Override
