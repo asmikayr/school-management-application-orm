@@ -66,4 +66,9 @@ public class LessonController {
         return "redirect:/lesson/create";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteLesson(@PathVariable("id") Long id){
+        lessonService.delete(id);
+        return "redirect:/lesson/create";
+    }
 }
