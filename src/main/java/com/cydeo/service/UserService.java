@@ -10,15 +10,17 @@ public interface UserService {
     UserDTO findByUserName(String username);// to support update and delete - knowing what user to update/delete
     void save(UserDTO user);
     UserDTO update (UserDTO user);
-    void deleteByUsername (String username);//delete based on unique, this case is username
+    void deleteById (Long id);//delete based on unique, this case is username
 
     List<UserDTO> listAllByRole(String description);// for course create page
 
     boolean isPasswordMatched(String password, String confirmPassword);
 
-    boolean isEligibleToUpdate(String username, Long roleId);
+    boolean isEligibleToUpdate(Long userId, Long roleId);
 
-    String isEligibleToDelete(String username);
+    String isEligibleToDelete(Long id);
+
+    UserDTO findById(Long userId);
 
 
 
