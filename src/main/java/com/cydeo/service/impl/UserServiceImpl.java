@@ -56,12 +56,12 @@ public class UserServiceImpl implements UserService {
         User convertedUser = mapperUtil.convert(user, User.class);
         convertedUser.setId(user1.getId());
         userRepository.save(convertedUser);
-        return findByUserName(user.getUserName());
+        return findById(user.getId());
     }
 
     @Override
-    public void deleteByUsername(String username) {
-        User user = userRepository.findByUserNameAndIsDeleted(username, false);
+    public void deleteById(Long id) {
+        User user = userRepository.findByIdAndIsDeleted(id, false);
         user.setIsDeleted(true);
         user.setUserName(user.getUserName() + "-" + user.getId());
         userRepository.save(user);
@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isEligibleToUpdate(String username, Long roleId) {
-        UserDTO user = findByUserName(username);
+    public boolean isEligibleToUpdate(Long userId, Long roleId) {
+        UserDTO user = findById(userId);
 
         boolean result = true;
 
@@ -113,8 +113,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String isEligibleToDelete(String username) {
-        UserDTO user = findByUserName(username);
+    public String isEligibleToDelete(Long id) {
+        UserDTO user = findById(id);
 
         String roleName = user.getRole().getDescription();
 
@@ -138,6 +138,11 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public UserDTO findById(Long userId) {
+        User user = userRepository.findByIdAndIsDeleted(userId, false);
+        return mapperUtil.convert(user, UserDTO.class);
+    }
 
 
 }
