@@ -13,6 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class StudentDTO {
 
+    private Long id;
+
     @NotBlank(message = "First Name is a required field")
     @Size(max = 15, min = 2, message = "First Name must be between 2 and 15 characters long")
     @Pattern(regexp = "[A-Z]\\w*", message = "First Name must starts with Uppercase character")
