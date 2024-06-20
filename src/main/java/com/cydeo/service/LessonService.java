@@ -12,3 +12,8 @@ public interface LessonService {
     void save(LessonDTO lessonDTO);
 
     List<LessonDTO> listAllByInstructor(UserDTO user);
+
+    LessonDTO findById(Long id);
+
+    void delete(Long id);
+}
