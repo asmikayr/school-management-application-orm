@@ -60,4 +60,11 @@ public class LessonServiceImpl implements LessonService {
         }
     }
 
+    @Override
+    public List<LessonDTO> findLessonsByCourseId(Long id) {
+        return lessonRepository.findAllByCourseIdAndIsDeleted(id,false).stream()
+                .map(lesson -> mapperUtil.convert(lesson,LessonDTO.class))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -13,5 +13,6 @@ public interface CourseService {
     void update(CourseDTO dto);
     void delete(Long id);
     List<CourseDTO> listAllCourseByCourseManager(UserDTO userDTO);
+    boolean checkAssignedCourseLessons(Long courseId);
 
 }
