@@ -1,12 +1,16 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.CourseDTO;
+import com.cydeo.dto.CourseStudentDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Course;
 import com.cydeo.entity.User;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.CourseRepository;
+import com.cydeo.repository.CourseStudentRepository;
 import com.cydeo.service.CourseService;
+import com.cydeo.service.CourseStudentService;
+import com.cydeo.service.LessonService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +22,14 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final MapperUtil mapperUtil;
+    private final CourseStudentService courseStudentService;
+    private final LessonService lessonService;
 
-    public CourseServiceImpl(CourseRepository courseRepository, MapperUtil mapperUtil) {
+    public CourseServiceImpl(CourseRepository courseRepository, MapperUtil mapperUtil, CourseStudentService courseStudentService, LessonService lessonService) {
         this.courseRepository = courseRepository;
         this.mapperUtil = mapperUtil;
+        this.courseStudentService = courseStudentService;
+        this.lessonService = lessonService;
     }
 
 
@@ -40,8 +48,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(CourseDTO dto) {
-        //retrieve all the students from db and assign course with false value
-
         courseRepository.save(mapperUtil.convert(dto, Course.class));
     }
 
@@ -57,12 +63,26 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void delete(Long id) {
-
+        if (checkAssignedCourseLessons(id)){
+            courseStudentService.findAllByCourseId(id)
+                    .forEach(courseStudentDTO -> {
+                        courseStudentDTO.setCourse(new CourseDTO());
+                        courseStudentDTO.setIsEnrolled(false);
+                    });
+            Course course = courseRepository.findById(id).get();
+            course.setIsDeleted(true);
+            courseRepository.save(course);
+        }
     }
 
     @Override
     public List<CourseDTO> listAllCourseByCourseManager(UserDTO userDTO) {
         List<Course> courseList = courseRepository.findAllByCourseManagerAndIsDeleted(mapperUtil.convert(userDTO, User.class), false);
         return courseList.stream().map(course -> mapperUtil.convert(course, CourseDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkAssignedCourseLessons(Long courseId) {
+        return lessonService.findLessonsByCourseId(courseId).isEmpty();
     }
 }

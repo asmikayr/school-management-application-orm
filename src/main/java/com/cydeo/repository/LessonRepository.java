@@ -10,4 +10,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     List<Lesson> findAllByIsDeleted(Boolean deleted);
     List<Lesson> findAllByInstructorAndIsDeleted (User instructor, Boolean deleted);
+    List<Lesson> findAllByCourseIdAndIsDeleted(Long courseId, Boolean isDeleted);
 }
