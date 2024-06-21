@@ -56,17 +56,20 @@ public class UserServiceImpl implements UserService {
         User convertedUser = mapperUtil.convert(user, User.class);
         convertedUser.setId(user1.getId());
         userRepository.save(convertedUser);
-        return findByUserName(user.getUserName());
+        return findById(user.getId());
     }
 
     @Override
-    public void delete(String username) {
-
+    public void deleteById(Long id) {
+        User user = userRepository.findByIdAndIsDeleted(id, false);
+        user.setIsDeleted(true);
+        user.setUserName(user.getUserName() + "-" + user.getId());
+        userRepository.save(user);
     }
 
     @Override
     public List<UserDTO> listAllByRole(String description) {
-        return userRepository.findByRoleDescriptionIgnoreCase(description)
+        return userRepository.findByRoleDescriptionIgnoreCaseAndIsDeleted(description, false)
                 .stream()
                 .map(user -> mapperUtil.convert(user, UserDTO.class))
                 .collect(Collectors.toList());
@@ -78,8 +81,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isEligibleToUpdate(String username, Long roleId) {
-        UserDTO user = findByUserName(username);
+    public boolean isEligibleToUpdate(Long userId, Long roleId) {
+        UserDTO user = findById(userId);
 
         boolean result = true;
 
@@ -92,15 +95,15 @@ public class UserServiceImpl implements UserService {
 
         switch (roleName) {
             case "Admin":
-                if (listAllUsers().stream().filter(u -> u.getRole().getDescription().equals("Admin")).count() == 1)
+                if (listAllByRole("Admin").size() == 1)
                     result = false;
                 break;
             case "Manager":
-                if (courseService.listAllCourse().stream().anyMatch(c -> c.getCourseManager().equals(mapperUtil.convert(user, User.class))))
+                if(!courseService.listAllCourseByCourseManager(user).isEmpty())
                     result = false;
                 break;
             case "Instructor":
-                if (lessonService.findAllLessons().stream().anyMatch(l -> l.getInstructor().equals(mapperUtil.convert(user, User.class))))
+                if (!lessonService.listAllByInstructor(user).isEmpty())
                     result = false;
                 break;
         }
@@ -110,8 +113,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String isEligibleToDelete(String username) {
-        UserDTO user = findByUserName(username);
+    public String isEligibleToDelete(Long id) {
+        UserDTO user = findById(id);
 
         String roleName = user.getRole().getDescription();
 
@@ -119,23 +122,27 @@ public class UserServiceImpl implements UserService {
 
         switch (roleName) {
             case "Admin":
-                if (listAllUsers().stream().filter(u -> u.getRole().getDescription().equals("Admin")).count() == 1)
+                if (listAllByRole("Admin").size() == 1)
                     result = "This admin is unique in the system. Not allowed to delete";
                 break;
             case "Manager":
-                if (courseService.listAllCourse().stream().anyMatch(c -> c.getCourseManager().equals(mapperUtil.convert(user, User.class))))
+                if(!courseService.listAllCourseByCourseManager(user).isEmpty())
                     result = "This manager is responsible for either one or more than one courses. Not allowed to delete";
                 break;
             case "Instructor":
-                if (lessonService.findAllLessons().stream().anyMatch(l -> l.getInstructor().equals(mapperUtil.convert(user, User.class))))
+                if (!lessonService.listAllByInstructor(user).isEmpty())
                     result = "This Instructor is responsible for either one or more than one lessons. Not allowed to delete";
                 break;
         }
 
-
         return result;
     }
 
+    @Override
+    public UserDTO findById(Long userId) {
+        User user = userRepository.findByIdAndIsDeleted(userId, false);
+        return mapperUtil.convert(user, UserDTO.class);
+    }
 
 
 }

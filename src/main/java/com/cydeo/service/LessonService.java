@@ -1,6 +1,7 @@
 package com.cydeo.service;
 
 import com.cydeo.dto.LessonDTO;
+import com.cydeo.dto.UserDTO;
 
 import java.util.List;
 
@@ -10,5 +11,9 @@ public interface LessonService {
 
     void save(LessonDTO lessonDTO);
 
-    List<LessonDTO> listAllLessonByCourse(Long id);
+    List<LessonDTO> listAllByInstructor(UserDTO user);
+
+    LessonDTO findById(Long id);
+
+    void delete(Long id);
 }

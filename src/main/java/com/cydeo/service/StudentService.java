@@ -7,9 +7,10 @@ import java.util.List;
 public interface StudentService {
 
     List<StudentDTO> listAllStudents();
-    StudentDTO getStudentById(Long id);
+    StudentDTO findById(Long id);
     void saveStudent(StudentDTO studentDTO);
-    StudentDTO updateStudent(StudentDTO studentDTO);
+    void update(StudentDTO studentDTO);
+    void assignedToStudent(Long id);
     void deleteStudent(Long id);
 
 }

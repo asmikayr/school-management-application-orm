@@ -1,16 +1,17 @@
 package com.cydeo.service.impl;
 
-import com.cydeo.dto.CourseDTO;
 import com.cydeo.dto.LessonDTO;
-import com.cydeo.entity.Course;
+import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Lesson;
+import com.cydeo.entity.User;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.LessonRepository;
-import com.cydeo.service.CourseService;
 import com.cydeo.service.LessonService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,12 +19,10 @@ public class LessonServiceImpl implements LessonService {
 
     private final LessonRepository lessonRepository;
     private final MapperUtil mapperUtil;
-    private final CourseService courseService;
 
-    public LessonServiceImpl(LessonRepository lessonRepository, MapperUtil mapperUtil, CourseService courseService) {
+    public LessonServiceImpl(LessonRepository lessonRepository, MapperUtil mapperUtil) {
         this.lessonRepository = lessonRepository;
         this.mapperUtil = mapperUtil;
-        this.courseService = courseService;
     }
 
     @Override
@@ -40,13 +39,25 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonDTO> listAllLessonByCourse(Long id) {
-        CourseDTO courseDTO = courseService.findById(id);
-        Course courseEntity = mapperUtil.convert(courseDTO,Course.class);
-        return lessonRepository.findAllByCourse(courseEntity).stream()
-                .map(lesson -> mapperUtil.convert(lesson,LessonDTO.class))
-                .collect(Collectors.toList());
+
+    public List<LessonDTO> listAllByInstructor(UserDTO user) {
+        List<Lesson> lessonList = lessonRepository.findAllByInstructorAndIsDeleted(mapperUtil.convert(user, User.class), false);
+        return lessonList.stream().map(lesson -> mapperUtil.convert(lesson, LessonDTO.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public LessonDTO findById(Long id) {
+        Lesson lesson = lessonRepository.findById(id).orElseThrow(()->new NoSuchElementException("Lesson could not be found"));
+        return mapperUtil.convert(lesson, LessonDTO.class);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Optional<Lesson> foundLesson = lessonRepository.findById(id);
+        if (foundLesson.isPresent()){
+            foundLesson.get().setIsDeleted(true);
+            lessonRepository.save(foundLesson.get());
+        }
+    }
 
 }
