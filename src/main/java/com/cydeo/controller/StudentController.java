@@ -55,13 +55,13 @@ public class StudentController {
         return "/student/student-courses";
     }
 
-//    @GetMapping("/delete/{email}")
-//    public String deleteStudent(@PathVariable("email") String username){
-//
-//        studentService.deleteById(username);
-//
-//        return "redirect:/student/create";
-//    }
+    @GetMapping("/delete/{id}")
+    public String deleteStudent(@PathVariable("id") Long id){
+
+        studentService.deleteStudent(id);
+
+        return "redirect:/student/create";
+    }
 
     @GetMapping("/update/{id}")
     public String updateStudent(@PathVariable("id") Long id, Model model) {
