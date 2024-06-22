@@ -73,5 +73,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(Long id) {
 
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent()) {
+            student.get().setIsDeleted(true);
+            studentRepository.save(student.get());
+        }
     }
 }
