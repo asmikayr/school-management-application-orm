@@ -2,18 +2,16 @@ package com.cydeo.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Table;
+import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Getter
 @Setter
-@Entity
-public class CourseStudent extends BaseEntity{
-
+@Table(name = "course_student")
+@NoArgsConstructor
+@AllArgsConstructor
+public class CourseStudent extends BaseEntity {
     private Boolean isEnrolled;
 
     @ManyToOne
@@ -21,5 +19,4 @@ public class CourseStudent extends BaseEntity{
 
     @ManyToOne
     private Student student;
-
 }

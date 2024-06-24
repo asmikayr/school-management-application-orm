@@ -5,18 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class CourseStudentDTO {
-
     private Long id;
-
-    private Boolean isEnrolled;
-
+    private boolean isEnrolled;
     private CourseDTO course;
-
     private StudentDTO student;
-
 }
