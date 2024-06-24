@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/course")
@@ -63,9 +64,15 @@ public class CourseController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteCourse(@PathVariable Long id){
+    public String deleteCourse(@PathVariable Long id, RedirectAttributes redirectAttributes){
 
-        courseService.delete(id);
+        if (courseService.checkAssignedCourseLessons(id)){
+            courseService.delete(id);
+            redirectAttributes.addFlashAttribute("success", "Successfully Deleted");
+        }else {
+            redirectAttributes.addFlashAttribute("error", "Course can not be deleted");
+        }
+
 
         return "redirect:/course/create";
     }
