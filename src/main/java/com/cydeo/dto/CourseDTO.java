@@ -21,7 +21,7 @@ public class CourseDTO {
 
     @NotBlank(message = "Course name is required field")
     @Size(max = 40, min = 2, message = "Course name must be between 2 and 40 characters long")
-    @Pattern(regexp = "([A-Za-z]\\w(?:\\s[A-Za-z]\\w*)*)", message = "Just use alphabetic characters with spaces")
+    @Pattern(regexp = "[A-Za-z]\\w*(?:\\s[A-Za-z]\\w*)*", message = "Just use alphabetic characters with spaces")
     private String name;
 
     @NotBlank(message = "Course description is required field")
