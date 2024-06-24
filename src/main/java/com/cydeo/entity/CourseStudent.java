@@ -14,7 +14,7 @@ import lombok.Setter;
 @Entity
 public class CourseStudent extends BaseEntity{
 
-    private Boolean isEnrolled;
+    private Boolean isEnrolled = false;
 
     @ManyToOne
     private Course course;
