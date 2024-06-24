@@ -3,6 +3,8 @@ package com.cydeo.controller;
 import com.cydeo.dto.StudentDTO;
 import com.cydeo.entity.Student;
 import com.cydeo.enums.State;
+import com.cydeo.service.CourseService;
+import com.cydeo.service.CourseStudentService;
 import com.cydeo.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,14 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
 
     private final StudentService studentService;
+    private final CourseService courseService;
+    private final CourseStudentService courseStudentService;
 
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, CourseService courseService, CourseStudentService courseStudentService) {
         this.studentService = studentService;
+        this.courseService = courseService;
+        this.courseStudentService = courseStudentService;
     }
 
     @GetMapping("/create")
@@ -49,11 +55,16 @@ public class StudentController {
 
     @GetMapping("/assign/{id}")
     public String assignStudent(@PathVariable("id") Long id, Model model){
-        StudentDTO student = studentService.findById(id);
-        model.addAttribute("student", student);
-
+        model.addAttribute("studentCourses", courseStudentService.listAllByStudentId(id));
         return "/student/student-courses";
     }
+
+//    @GetMapping ("/enroll/{courseId}/{studentId}")
+//    public String enrollStudent(@PathVariable("courseId") Long courseId, @PathVariable("studentId") Long studentId){
+//        courseStudentService.enroll(courseId, studentId);
+//        return "redirect:/student/assign/{studentId}";
+//    }
+
 
     @GetMapping("/delete/{id}")
     public String deleteStudent(@PathVariable("id") Long id){
@@ -84,11 +95,7 @@ public class StudentController {
 
     }
 
-//    @GetMapping("/enroll/{email}/{courseId}")
-//    public String enrollStudent(@PathVariable String email, @PathVariable Long courseId){
-//        studentService.enrollStudent(email, courseId);
-//        return "redirect:/student/assign/{email}";
-//    }
+
 
 //    @GetMapping("/drop/{email}/{courseId}")
 //    public String dropStudent(@PathVariable String email, @PathVariable Long courseId){

@@ -11,6 +11,7 @@ import com.cydeo.repository.CourseStudentRepository;
 import com.cydeo.service.CourseService;
 import com.cydeo.service.CourseStudentService;
 import com.cydeo.service.LessonService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseStudentService courseStudentService;
     private final LessonService lessonService;
 
-    public CourseServiceImpl(CourseRepository courseRepository, MapperUtil mapperUtil, CourseStudentService courseStudentService, LessonService lessonService) {
+    public CourseServiceImpl(CourseRepository courseRepository, MapperUtil mapperUtil, @Lazy CourseStudentService courseStudentService, LessonService lessonService) {
         this.courseRepository = courseRepository;
         this.mapperUtil = mapperUtil;
         this.courseStudentService = courseStudentService;
@@ -64,10 +65,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(Long id) {
         if (checkAssignedCourseLessons(id)){
-            courseStudentService.findAllByCourseId(id)
+            courseStudentService.listAllByCourseId(id)
                     .forEach(courseStudentDTO -> {
                         courseStudentDTO.setCourse(new CourseDTO());
-                        courseStudentDTO.setIsEnrolled(false);
+                        courseStudentDTO.setEnrolled(false);
                     });
             Course course = courseRepository.findById(id).get();
             course.setIsDeleted(true);

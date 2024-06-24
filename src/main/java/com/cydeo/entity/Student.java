@@ -32,5 +32,9 @@ public class Student extends BaseEntity {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @OneToOne(fetch =FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "assigned_Course")
+    private Course assignedCourse;
+
 
 }

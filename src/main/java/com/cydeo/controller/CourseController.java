@@ -4,6 +4,7 @@ import com.cydeo.dto.CourseDTO;
 import com.cydeo.service.CourseService;
 import com.cydeo.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +18,7 @@ public class CourseController {
     private final CourseService courseService;
     private final UserService userService;
 
-    public CourseController(CourseService courseService, UserService userService) {
+    public CourseController(@Lazy CourseService courseService, UserService userService) {
         this.courseService = courseService;
         this.userService = userService;
     }
