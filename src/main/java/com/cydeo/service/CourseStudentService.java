@@ -9,5 +9,6 @@ public interface CourseStudentService {
 
     List<CourseStudentDTO> listAllByCourseId(Long id);
 
-    void enroll(Long courseId, Long studentId);
+    CourseStudentDTO enroll(Long courseStudentId, Long studentId);
+    CourseStudentDTO drop(Long courseStudentId, Long studentId);
 }

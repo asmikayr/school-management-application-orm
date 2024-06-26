@@ -59,12 +59,17 @@ public class StudentController {
         return "/student/student-courses";
     }
 
-//    @GetMapping ("/enroll/{courseId}/{studentId}")
-//    public String enrollStudent(@PathVariable("courseId") Long courseId, @PathVariable("studentId") Long studentId){
-//        courseStudentService.enroll(courseId, studentId);
-//        return "redirect:/student/assign/{studentId}";
-//    }
+    @GetMapping ("/enroll/{courseStudentId}/{studentId}")
+    public String enrollStudent(@PathVariable("courseStudentId") Long courseStudentId, @PathVariable("studentId") Long studentId,Model model) {
+        model.addAttribute("studentCourses",courseStudentService.enroll(courseStudentId, studentId));
+        return "redirect:/student/assign/{studentId}";
+    }
 
+        @GetMapping("/drop/{courseStudentId}/{studentId}")
+    public String dropStudent(@PathVariable("courseStudentId") Long courseStudentId, @PathVariable("studentId") Long studentId,Model model){
+        model.addAttribute("studentCourses",courseStudentService.drop(courseStudentId, studentId));
+        return "redirect:/student/assign/{studentId}";
+    }
 
     @GetMapping("/delete/{id}")
     public String deleteStudent(@PathVariable("id") Long id){
@@ -97,11 +102,7 @@ public class StudentController {
 
 
 
-//    @GetMapping("/drop/{email}/{courseId}")
-//    public String dropStudent(@PathVariable String email, @PathVariable Long courseId){
-//        studentService.dropStudent(email, courseId);
-//        return "redirect:/student/assign/{email}";
-//    }
+
 
     @ModelAttribute
     public void defineGeneralModels(Model model) {

@@ -44,9 +44,18 @@ public class CourseStudentServiceImpl implements CourseStudentService {
     }
 
     @Override
-    public void enroll(Long courseId, Long studentId) {
-        CourseStudent courseStudent=courseStudentRepository.findByIdAndStudentId(courseId, studentId);
+    public CourseStudentDTO enroll(Long courseStudentId, Long studentId) {
+        CourseStudent courseStudent=courseStudentRepository.findByIdAndStudentId(courseStudentId, studentId);
         courseStudent.setIsEnrolled(true);
+        courseStudentRepository.save(courseStudent);
+        return mapper.convert(courseStudent, CourseStudentDTO.class);
+    }
 
+    @Override
+    public CourseStudentDTO drop(Long courseStudentId, Long studentId) {
+        CourseStudent courseStudent=courseStudentRepository.findByIdAndStudentId(courseStudentId, studentId);
+        courseStudent.setIsEnrolled(false);
+        courseStudentRepository.save(courseStudent);
+        return mapper.convert(courseStudent, CourseStudentDTO.class);
     }
 }

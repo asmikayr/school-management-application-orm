@@ -8,5 +8,5 @@ import java.util.List;
 public interface CourseStudentRepository extends JpaRepository<CourseStudent,Long>{
      List<CourseStudent> findByStudentId(Long id);
      List<CourseStudent> findByCourseId(Long id);
-     CourseStudent findByIdAndStudentId(Long CourseId, Long StudentId);
+     CourseStudent findByIdAndStudentId(Long id, Long StudentId);
 }
