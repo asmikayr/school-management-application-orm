@@ -27,4 +27,9 @@ public class LessonStudentServiceImpl implements LessonStudentService {
         List<LessonStudent> students = lessonStudentRepository.findAllByLessonInstructorId(id);
         return students.stream().map(s-> mapperUtil.convert(s, LessonStudentDTO.class)).collect(Collectors.toList());
     }
+
+    @Override
+    public LessonStudentDTO findById(Long id) {
+        return mapperUtil.convert(lessonStudentRepository.findById(id), LessonStudentDTO.class);
+    }
 }
