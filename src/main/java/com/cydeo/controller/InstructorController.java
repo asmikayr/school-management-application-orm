@@ -1,32 +1,25 @@
 package com.cydeo.controller;
 
-import com.cydeo.entity.Lesson;
-import com.cydeo.entity.Student;
-import com.cydeo.service.LessonService;
-import com.cydeo.service.StudentService;
-import jakarta.validation.Valid;
+import com.cydeo.service.LessonStudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/instructor")
 public class InstructorController {
 
-    private final StudentService studentService;
-    private final LessonService lessonService;
+    private final LessonStudentService lessonStudentService;
 
-    public InstructorController(StudentService studentService, LessonService lessonService) {
-        this.studentService = studentService;
-        this.lessonService = lessonService;
+    public InstructorController(LessonStudentService lessonStudentService) {
+        this.lessonStudentService = lessonStudentService;
     }
 
 
     @GetMapping("/students")
     public String instructorPage(Model model){
 
-        model.addAttribute("studentLessons", studentService.findStudentsByInstructor("loren@hotmail.com"));
+        model.addAttribute("studentLessons", lessonStudentService.findStudentsByInstructorId(4L));
 
         return "/instructor/general-assessment";
     }
