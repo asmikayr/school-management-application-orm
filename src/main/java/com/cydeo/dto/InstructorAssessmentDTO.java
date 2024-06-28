@@ -16,10 +16,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class InstructorAssessmentDTO {
 
+    private Long id;
+
     private LessonStudentDTO lessonStudent;
 
-    @NotNull(message = "Grade can not be empty")
+
     private LocalDate gradeDate;
+    @NotNull(message = "Grade can not be empty")
     private Long grade;
     @NotBlank(message = "Message can not be empty!")
     private String instructorImpressionOfStudent;
