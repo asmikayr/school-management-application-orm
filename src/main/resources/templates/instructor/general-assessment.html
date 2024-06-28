@@ -42,8 +42,8 @@
                                 <tbody>
                                 <tr th:each="studentLesson:${studentLessons}">
                                     <td th:text="${studentLesson.student.firstName} + ' ' + ${studentLesson.student.lastName}"></td>
-                                    <td th:text="${studentLesson.lesson.name}"></td>
                                     <td th:text="${studentLesson.lesson.course.name}"></td>
+                                    <td th:text="${studentLesson.lesson.name}"></td>
                                     <td>
                                         <a th:href="@{/instructor/students/{lessonStudentId} (lessonStudentId=${studentLesson.id})}">
                                             <button type="button" class="btn btn-facebook">Assess</button>
