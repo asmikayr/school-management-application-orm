@@ -1,6 +1,7 @@
 package com.cydeo.controller;
 
 import com.cydeo.dto.InstructorAssessmentDTO;
+import com.cydeo.dto.LessonStudentDTO;
 import com.cydeo.service.InstructorAssessmentService;
 import com.cydeo.service.LessonStudentService;
 import jakarta.validation.Valid;
@@ -10,7 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/instructor/students")
+@RequestMapping("/instructor")
 public class InstructorController {
 
     private final LessonStudentService lessonStudentService;
@@ -22,7 +23,7 @@ public class InstructorController {
     }
 
 
-    @GetMapping
+    @GetMapping("/students")
     public String instructorPage(Model model){
 
         model.addAttribute("studentLessons", lessonStudentService.findStudentsByInstructorId(4L));
@@ -30,24 +31,28 @@ public class InstructorController {
         return "/instructor/general-assessment";
     }
 
-//    @GetMapping("/{lessonStudentId}")
-//    public String assessStudentPage(Model model, @PathVariable("lessonStudentId") Long lessonStudentId){
-//
-//        model.addAttribute("assessment", new InstructorAssessmentDTO());
-//        model.addAttribute("lessonStudent", lessonStudentService.findById(lessonStudentId));
-//        model.addAttribute("grades", instructorAssessmentService.findGradesByLessonStudentId(lessonStudentId));
-//
-//        return "instructor/assess-student";
-//    }
-//
-//    @PostMapping("/{lessonStudentId}")
-//    public String assessStudent(@Valid @ModelAttribute("instructorAssessment") InstructorAssessmentDTO instructorAssessment, BindingResult bindingResult, Model model, @PathVariable("lessonStudentId") Long lessonStudentId){
-//
-//        if (bindingResult.hasErrors()){
-//            model.addAttribute("lessonStudent", lessonStudentService.findById(lessonStudentId));
-//            return "/instructor/assess-student";
-//        }
-//        lessonStudentService.assessStudent(instructorAssessment, lessonStudentId);
-//        return "redirect:/instructor/students";
-//    }
+    @GetMapping("/students/{lessonStudentId}")
+    public String assessStudentPage(Model model, @PathVariable("lessonStudentId") Long lessonStudentId){
+        LessonStudentDTO lessonStudent = lessonStudentService.findById(lessonStudentId);
+
+        model.addAttribute("lessonStudent", lessonStudent);
+        model.addAttribute("assessment", new InstructorAssessmentDTO());
+        model.addAttribute("grades", instructorAssessmentService.findAllByLessonStudent(lessonStudent));
+
+        return "/instructor/assess-student";
+    }
+
+    @PostMapping("/students/{lessonStudentId}")
+    public String assessStudent(@Valid @ModelAttribute("assessment") InstructorAssessmentDTO assessment, BindingResult bindingResult, Model model, @PathVariable("lessonStudentId") Long lessonStudentId){
+
+        LessonStudentDTO lessonStudent = lessonStudentService.findById(lessonStudentId);
+
+        if (bindingResult.hasErrors()){
+            model.addAttribute("lessonStudent", lessonStudent);
+            return "/instructor/assess-student";
+        }
+      //  lessonStudentService.assessStudent(assessment, lessonStudentId);
+        instructorAssessmentService.assessStudentById(assessment, lessonStudentId);
+        return "redirect:/instructor/students";
+    }
 }
