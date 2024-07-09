@@ -49,6 +49,7 @@ public class InstructorController {
 
         if (bindingResult.hasErrors()){
             model.addAttribute("lessonStudent", lessonStudent);
+            model.addAttribute("grades", instructorAssessmentService.findAllByLessonStudent(lessonStudent));
             return "/instructor/assess-student";
         }
       //  lessonStudentService.assessStudent(assessment, lessonStudentId);
