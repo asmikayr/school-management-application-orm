@@ -47,11 +47,11 @@
                                     <td th:text="${#temporals.format(studentCourse.course.startDate,'MM.dd.yyyy')}"></td>
                                     <td th:text="${#temporals.format(studentCourse.course.endDate,'MM.dd.yyyy')}"></td>
                                     <td>
-                                        <a th:unless="${studentCourse.isEnrolled()}"
+                                        <a th:unless="${studentCourse.isEnrolled}"
                                            th:href="@{/student/enroll/{courseStudentId}/{id} (courseStudentId=${studentCourse.id}, id=${studentCourse.student.id})}">
                                             <button type="button" class="btn btn-success">Enroll</button>
                                         </a>
-                                        <a th:if="${studentCourse.isEnrolled()}"
+                                        <a th:if="${studentCourse.isEnrolled}"
                                            th:href="@{/student/drop/{courseStudentId}/{id} (courseStudentId=${studentCourse.id}, id=${studentCourse.student.id})}">
                                             <button type="button" class="btn btn-danger">Drop</button>
                                         </a>
