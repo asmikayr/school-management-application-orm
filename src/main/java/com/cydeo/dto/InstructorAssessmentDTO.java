@@ -22,7 +22,7 @@ public class InstructorAssessmentDTO {
 
 
     private LocalDate gradeDate;
-    @NotNull(message = "Grade can not be empty")
+    @NotNull(message = "Grade can not be empty!")
     private Long grade;
     @NotBlank(message = "Message can not be empty!")
     private String instructorImpressionOfStudent;
